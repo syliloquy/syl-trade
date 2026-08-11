@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Trading List</title>
+<title>syliloquy's Trading List</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,600&family=Karla:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -51,21 +51,37 @@
     text-transform:uppercase;
     color:var(--amber);
   }
+  .infobar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 28px;
+    padding:12px 4px 0;
+    font-size:.82rem;
+    color:#3a3a36;
+  }
+  .infobar .lbl{
+    font-family:'Space Mono',monospace;
+    font-size:.58rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--mute);
+    margin-right:7px;
+  }
+  .infobar .seek{color:var(--amber);font-weight:700;}
   .headright{display:flex;align-items:baseline;gap:16px;}
-  #sortbtn{
+  #sortsel{
     font-family:'Space Mono',monospace;
     font-size:.62rem;
     letter-spacing:.1em;
     text-transform:uppercase;
-    padding:6px 12px;
+    padding:6px 10px;
     background:none;
     border:1px solid var(--text);
     border-radius:4px;
     color:var(--text);
     cursor:pointer;
   }
-  #sortbtn:hover{background:var(--text);color:#fff;}
-  #sortbtn:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+  #sortsel:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
 
   .tabs{display:flex;gap:6px;margin-top:18px;}
   .tab{
@@ -168,7 +184,7 @@
     letter-spacing:.16em;
     text-transform:uppercase;
     color:var(--mute);
-    padding:10px 30px 8px 4px;
+    padding:10px 320px 8px 4px;
   }
 
   .rec{border-bottom:1px solid var(--line);}
@@ -177,7 +193,7 @@
     grid-template-columns:1fr 140px 84px;
     gap:14px;
     align-items:baseline;
-    padding:11px 190px 11px 4px;
+    padding:11px 320px 11px 4px;
     cursor:pointer;
     list-style:none;
     position:relative;
@@ -186,7 +202,7 @@
   .rec summary::after{
     content:"Click to view Cast/Notes";
     position:absolute;
-    right:8px;
+    right:118px;
     top:14px;
     font-family:'Space Mono',monospace;
     font-size:.58rem;
@@ -248,11 +264,103 @@
     color:var(--mute);
   }
 
+  /* ---------- request form ---------- */
+  .reqbtn{
+    position:absolute;
+    right:8px;
+    top:50%;
+    transform:translateY(-50%);
+    padding:6px 12px;
+    font-family:'Space Mono',monospace;
+    font-size:.6rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    background:none;
+    border:1px solid var(--amber);
+    border-radius:4px;
+    color:var(--amber);
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .reqbtn.on{background:var(--amber);color:#fff;}
+  .reqbtn:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+
+  #reqpill{
+    position:fixed;
+    right:18px;
+    bottom:18px;
+    display:none;
+    padding:11px 18px;
+    font-family:'Space Mono',monospace;
+    font-size:.7rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    background:var(--text);
+    color:#fff;
+    border:none;
+    border-radius:999px;
+    cursor:pointer;
+    box-shadow:0 8px 22px -8px rgba(0,0,0,.5);
+  }
+  #reqpill.show{display:block;}
+
+  #reqform{
+    margin-top:34px;
+    padding:20px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:6px;
+  }
+  #reqform h2{
+    font-family:'Bodoni Moda',Georgia,serif;
+    font-size:1.15rem;
+    margin:0 0 4px;
+  }
+  #reqform .hint{font-size:.78rem;color:var(--mute);margin:0 0 14px;}
+  #reqform label{
+    display:block;
+    font-family:'Space Mono',monospace;
+    font-size:.58rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--mute);
+    margin:12px 0 4px;
+  }
+  #reqform input,#reqform textarea{
+    width:100%;
+    padding:8px 10px;
+    font-family:'Karla',sans-serif;
+    font-size:.86rem;
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:#fafaf8;
+    color:var(--text);
+  }
+  #reqform textarea{min-height:64px;resize:vertical;}
+  #reqform input:focus,#reqform textarea:focus{outline:2px solid var(--amber);outline-offset:0;border-color:transparent;}
+  #openform{
+    margin-top:14px;
+    padding:9px 18px;
+    font-family:'Space Mono',monospace;
+    font-size:.72rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    background:var(--text);
+    color:#fff;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+  }
+  #openform:hover{background:#333;}
+  #openform:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+  #reqmsg{font-size:.78rem;color:var(--amber);margin-left:10px;}
+
 
   @media (max-width:720px){
     .colhead{display:none;}
-    .rec summary{grid-template-columns:1fr;gap:5px;padding:11px 4px 30px;}
-    .rec summary::after{top:auto;bottom:10px;left:4px;right:auto;}
+    .rec summary{grid-template-columns:1fr;gap:5px;padding:11px 4px 40px;}
+    .rec summary::after{top:auto;bottom:12px;left:4px;right:auto;}
+    .reqbtn{top:auto;bottom:6px;transform:none;}
     .size{text-align:left;}
     .master:not(:empty)::before{content:"Master: ";color:var(--mute);}
   }
@@ -264,10 +372,20 @@
   <header>
     <h1>Trading List</h1>
     <div class="headright">
-      <button type="button" id="sortbtn" aria-label="Sort list">Sort: A&ndash;Z</button>
+      <select id="sortsel" aria-label="Sort list">
+        <option value="group">Grouped by show</option>
+        <option value="new">Newest first</option>
+        <option value="old">Oldest first</option>
+      </select>
       <span class="count"><span id="reccount">20</span> recordings</span>
     </div>
   </header>
+
+  <div class="infobar">
+    <span><span class="lbl">Contact</span>Discord: syliloquy &middot; Reddit: Extra_Drink_3952</span>
+    <span><span class="lbl">Seeking</span><span class="seek">Anything with Jack Wolfe, Jamie Muscato, or Eva Noblezada &middot; Encora invite</span></span>
+    <span><span class="lbl">Updated</span>August 10, 2026</span>
+  </div>
 
   <div class="tabs" role="tablist">
     <button type="button" class="tab active" id="tab-video" role="tab" aria-selected="true">Video</button>
@@ -640,9 +758,21 @@
   </div><!-- /list-audio -->
   </div><!-- /pane-audio -->
 
-  <footer>Click a title for cast, file details, and notes.</footer>
+  <footer>Click a title for cast, file details, and notes. Hit "+ Request" on any row to build a trade request.</footer>
+
+  <section id="reqform" aria-label="Trade request">
+    <h2>Request a trade</h2>
+    <p class="hint">Open any entry above and hit "Add to request" &mdash; your picks collect here. Then open the request form; your picks carry over automatically.</p>
+
+    <label for="r-want">Requesting</label>
+    <textarea id="r-want" placeholder="Add entries from the list above, or type them here"></textarea>
+
+    <button type="button" id="openform">Open request form</button><span id="reqmsg"></span>
+  </section>
 
 </div>
+
+<button type="button" id="reqpill">Request (0)</button>
 
 <script>
 (function(){
@@ -684,8 +814,25 @@
     return showName(rec).split(':')[0].trim();
   }
 
-  /* ---------- grouping ---------- */
-  function regroup(list, alphabetical){
+  /* ---------- grouping + sorting ---------- */
+  function recDate(rec){
+    var w=rec.querySelector('.where');
+    if(!w) return 0;
+    var txt=w.textContent;
+    var parts=txt.split('\u00b7');
+    var d=(parts.length>1?parts[parts.length-1]:txt)
+      .replace(/\(.*?\)/g,'').trim();
+    var t=Date.parse(d);
+    if(isNaN(t)){
+      var y=d.match(/\b(19|20)\d\d\b/);
+      t=y?Date.parse(y[0]+'-06-01'):0;
+    }
+    return t||0;
+  }
+
+  var sortMode='az'; /* az | new | old */
+
+  function regroup(list){
     var recs=Array.prototype.slice.call(list.querySelectorAll('.rec'));
     recs.forEach(wrapShowname);
 
@@ -695,7 +842,26 @@
       if(!byKey[k]){ byKey[k]={label:groupLabel(rec),recs:[]}; order.push(k); }
       byKey[k].recs.push(rec);
     });
-    if(alphabetical) order.sort();
+
+    /* sort recordings within each group by date, direction per mode */
+    var newestFirst=(sortMode!=='old');
+    order.forEach(function(k){
+      byKey[k].recs.sort(function(a,b){
+        return newestFirst?recDate(b)-recDate(a):recDate(a)-recDate(b);
+      });
+    });
+
+    /* order the groups */
+    if(sortMode==='az'){
+      order.sort();
+    } else {
+      order.sort(function(ka,kb){
+        var da=byKey[ka].recs.map(recDate), db=byKey[kb].recs.map(recDate);
+        var va=newestFirst?Math.max.apply(null,da):Math.min.apply(null,da);
+        var vb=newestFirst?Math.max.apply(null,db):Math.min.apply(null,db);
+        return newestFirst?vb-va:va-vb;
+      });
+    }
 
     list.innerHTML='';
     order.forEach(function(k){
@@ -782,15 +948,106 @@
   tabAudio.addEventListener('click',function(){switchTab(true);});
 
   /* ---------- sort ---------- */
-  document.getElementById('sortbtn').addEventListener('click', function(){
-    regroup(activeList(), true);
+  function flatten(list,cmp){
+    var recs=Array.prototype.slice.call(list.querySelectorAll('.rec'));
+    recs.forEach(wrapShowname);
+    recs.sort(cmp);
+    list.innerHTML='';
+    recs.forEach(function(rec){
+      rec.classList.remove('in-group');
+      list.appendChild(rec);
+    });
+    applySearch();
+  }
+
+  var sortSel=document.getElementById('sortsel');
+  function applyView(){
+    var mode=sortSel.value;
+    [document.getElementById('list'),document.getElementById('list-audio')]
+      .forEach(function(list){
+        if(mode==='group'){
+          regroup(list);
+        } else if(mode==='new'){
+          flatten(list,function(a,b){return recDate(b)-recDate(a);});
+        } else if(mode==='old'){
+          flatten(list,function(a,b){return recDate(a)-recDate(b);});
+        }
+      });
+  }
+  sortSel.addEventListener('change',applyView);
+
+  /* ---------- trade requests ---------- */
+  var wantBox=document.getElementById('r-want'),
+      pill=document.getElementById('reqpill');
+
+  function recLabel(rec){
+    var name=showName(rec);
+    var w=rec.querySelector('.where');
+    return name+(w?' ('+w.textContent.trim()+')':'');
+  }
+  function injectReqButtons(){
+    Array.prototype.forEach.call(document.querySelectorAll('.rec'),function(rec){
+      if(rec.querySelector('.reqbtn')) return;
+      var summ=rec.querySelector('summary');
+      if(!summ) return;
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='reqbtn';
+      b.textContent='+ Request';
+      b.addEventListener('click',function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        var label=recLabel(rec);
+        var lines=wantBox.value.split('\n').filter(Boolean);
+        var i=lines.indexOf('- '+label);
+        if(i===-1){
+          lines.push('- '+label);
+          b.textContent='\u2713 Added';
+          b.classList.add('on');
+        } else {
+          lines.splice(i,1);
+          b.textContent='+ Request';
+          b.classList.remove('on');
+        }
+        wantBox.value=lines.join('\n');
+        updatePill();
+      });
+      summ.appendChild(b);
+    });
+  }
+  function updatePill(){
+    var n=wantBox.value.split('\n').filter(Boolean).length;
+    pill.textContent='Request ('+n+')';
+    pill.classList.toggle('show',n>0);
+  }
+  pill.addEventListener('click',function(){
+    document.getElementById('reqform').scrollIntoView({behavior:'smooth'});
+  });
+  wantBox.addEventListener('input',updatePill);
+
+  var FORM_BASE='https://docs.google.com/forms/d/e/1FAIpQLSddnpOLcy8GCvURIPSVzHRrKs9JFPELRwFMp0fEHGtvr-LuHA/viewform';
+  var FORM_ENTRY='entry.1045781291';
+
+  document.getElementById('openform').addEventListener('click',function(){
+    var picks=wantBox.value.trim();
+    var url=FORM_BASE+'?usp=pp_url&'+FORM_ENTRY+'='+encodeURIComponent(picks);
+    window.open(url,'_blank','noopener');
+    document.getElementById('reqmsg').textContent=picks?'Form opened with your picks.':'Form opened.';
   });
 
   /* ---------- init ---------- */
-  regroup(document.getElementById('list'), false);
-  regroup(document.getElementById('list-audio'), false);
+  applyView();
+  injectReqButtons();
   applySearch();
 })();
 </script>
+<!--
+  Optional visitor counter (private analytics via GoatCounter):
+  1. Sign up free at https://www.goatcounter.com and pick a site code
+  2. Replace YOURCODE below with it and delete these comment markers
+  Stats appear only on your GoatCounter dashboard - nothing shows on the page.
+
+<script data-goatcounter="https://YOURCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+-->
 </body>
 </html>
