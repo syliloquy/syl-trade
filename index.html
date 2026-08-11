@@ -15,6 +15,7 @@
     --text:#111111;
     --mute:#504f4a;
     --amber:#8f5f06;
+    --teal:#0f766e;
   }
   *{box-sizing:border-box;}
   body{
@@ -101,13 +102,52 @@
     background:var(--card);
     color:var(--text);
     border-color:var(--text);
+    border-top:3px solid var(--teal);
     font-weight:700;
   }
   .tab:focus-visible{outline:2px solid var(--amber);outline-offset:-2px;}
   .pane{display:none;}
   .pane.active{display:block;}
 
-  .searchwrap{margin:14px 0 2px;}
+  .controls{
+    position:sticky;
+    top:0;
+    z-index:5;
+    background:var(--bg);
+    padding-top:6px;
+    box-shadow:0 6px 8px -8px rgba(0,0,0,.18);
+  }
+  .searchwrap{margin:14px 0 8px;}
+  #expandbtn{
+    font-family:'Space Mono',monospace;
+    font-size:.62rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    padding:6px 10px;
+    background:none;
+    border:1px solid var(--text);
+    border-radius:4px;
+    color:var(--text);
+    cursor:pointer;
+  }
+  #expandbtn:hover{background:var(--text);color:#fff;}
+  #expandbtn:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+  #topbtn{
+    position:fixed;
+    left:18px;
+    bottom:18px;
+    display:none;
+    width:42px;height:42px;
+    font-size:1.1rem;
+    background:var(--card);
+    color:var(--text);
+    border:1px solid var(--line);
+    border-radius:50%;
+    cursor:pointer;
+    box-shadow:0 8px 22px -10px rgba(0,0,0,.4);
+  }
+  #topbtn.show{display:block;}
+  #topbtn:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
   #search{
     width:100%;
     padding:10px 14px;
@@ -118,7 +158,7 @@
     background:#fff;
     color:var(--text);
   }
-  #search:focus{outline:2px solid var(--amber);outline-offset:0;border-color:transparent;}
+  #search:focus{outline:2px solid var(--teal);outline-offset:0;border-color:transparent;}
   #noresults{
     display:none;
     padding:22px 4px;
@@ -172,7 +212,7 @@
     font-family:'Karla',sans-serif;
     font-size:.78rem;
     font-weight:700;
-    color:var(--amber);
+    color:var(--teal);
     margin-top:2px;
     letter-spacing:.01em;
   }
@@ -258,12 +298,12 @@
   .det dd{margin:0 0 12px;color:#262622;}
   .det dd:last-child{margin-bottom:0;}
   .det a{
-    color:var(--text);
+    color:var(--teal);
     font-family:'Space Mono',monospace;
     text-decoration:none;
-    border-bottom:1px solid var(--amber);
+    border-bottom:1px solid var(--teal);
   }
-  .det a:hover{background:rgba(143,95,6,.14);}
+  .det a:hover{background:rgba(15,118,110,.12);}
   .det a:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
 
   footer{
@@ -381,6 +421,7 @@
   <header>
     <h1>Trading List</h1>
     <div class="headright">
+      <button type="button" id="expandbtn">Expand all</button>
       <select id="sortsel" aria-label="Sort list">
         <option value="group">Grouped by show</option>
         <option value="new">Newest first</option>
@@ -396,6 +437,7 @@
     <span><span class="lbl">Updated</span>August 10, 2026</span>
   </div>
 
+  <div class="controls">
   <div class="tabs" role="tablist">
     <button type="button" class="tab active" id="tab-video" role="tab" aria-selected="true">Video</button>
     <button type="button" class="tab" id="tab-audio" role="tab" aria-selected="false">Audio Only</button>
@@ -404,6 +446,7 @@
   <div class="searchwrap">
     <input type="search" id="search" placeholder="Search titles or cast names&hellip;" aria-label="Search titles or cast names">
   </div>
+  </div><!-- /controls -->
   <p id="noresults">No matches.</p>
 
   <div class="pane active" id="pane-video">
@@ -884,6 +927,7 @@
 </div>
 
 <button type="button" id="reqpill">Request (0)</button>
+<button type="button" id="topbtn" aria-label="Back to top">↑</button>
 
 <script>
 (function(){
@@ -1164,6 +1208,24 @@
     var url=FORM_BASE+'?usp=pp_url&'+FORM_ENTRY+'='+encodeURIComponent(picks);
     window.open(url,'_blank','noopener');
     document.getElementById('reqmsg').textContent=picks?'Form opened with your picks.':'Form opened.';
+  });
+
+  /* ---------- expand/collapse all ---------- */
+  var expandBtn=document.getElementById('expandbtn');
+  expandBtn.addEventListener('click',function(){
+    var recs=activeList().querySelectorAll('.rec');
+    var anyClosed=Array.prototype.some.call(recs,function(r){return !r.open && r.style.display!=='none';});
+    Array.prototype.forEach.call(recs,function(r){ r.open=anyClosed; });
+    expandBtn.textContent=anyClosed?'Collapse all':'Expand all';
+  });
+
+  /* ---------- back to top ---------- */
+  var topBtn=document.getElementById('topbtn');
+  window.addEventListener('scroll',function(){
+    topBtn.classList.toggle('show',window.scrollY>600);
+  },{passive:true});
+  topBtn.addEventListener('click',function(){
+    window.scrollTo({top:0,behavior:'smooth'});
   });
 
   /* ---------- init ---------- */
