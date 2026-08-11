@@ -13,8 +13,8 @@
     --card:#ffffff;
     --line:#dcdcd8;
     --text:#111111;
-    --mute:#6f6f6a;
-    --amber:#c07f10;
+    --mute:#504f4a;
+    --amber:#8f5f06;
   }
   *{box-sizing:border-box;}
   body{
@@ -57,7 +57,7 @@
     gap:6px 28px;
     padding:12px 4px 0;
     font-size:.82rem;
-    color:#3a3a36;
+    color:#262622;
   }
   .infobar .lbl{
     font-family:'Space Mono',monospace;
@@ -139,9 +139,9 @@
     border-radius:6px 6px 0 0;
   }
   .group-head .gname{
-    font-family:'Bodoni Moda',Georgia,serif;
-    font-weight:600;
-    font-size:1.25rem;
+    font-family:'Karla','Helvetica Neue',Arial,sans-serif;
+    font-weight:700;
+    font-size:1.02rem;
     color:var(--text);
   }
   .group-head .gcount{
@@ -167,10 +167,19 @@
   }
   .in-group[open] summary .title::before{content:"\25BE";}
   .in-group .showname{display:none;}
-  .in-group .where{
+  .leads{
+    display:block;
     font-family:'Karla',sans-serif;
-    font-size:.92rem;
-    font-weight:600;
+    font-size:.78rem;
+    font-weight:700;
+    color:var(--amber);
+    margin-top:2px;
+    letter-spacing:.01em;
+  }
+  .in-group .where{
+    font-family:'Karla','Helvetica Neue',Arial,sans-serif;
+    font-size:1.02rem;
+    font-weight:700;
     color:var(--text);
     margin-top:0;
   }
@@ -184,7 +193,7 @@
     letter-spacing:.16em;
     text-transform:uppercase;
     color:var(--mute);
-    padding:10px 320px 8px 4px;
+    padding:10px 150px 8px 4px;
   }
 
   .rec{border-bottom:1px solid var(--line);}
@@ -193,32 +202,31 @@
     grid-template-columns:1fr 140px 84px;
     gap:14px;
     align-items:baseline;
-    padding:11px 320px 11px 4px;
+    padding:11px 150px 11px 4px;
     cursor:pointer;
     list-style:none;
     position:relative;
   }
   .rec summary::-webkit-details-marker{display:none;}
   .rec summary::after{
-    content:"Click to view Cast/Notes";
+    content:"\25BE";
     position:absolute;
     right:118px;
-    top:14px;
-    font-family:'Space Mono',monospace;
-    font-size:.58rem;
-    letter-spacing:.08em;
-    text-transform:uppercase;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:.85rem;
     color:var(--mute);
+    transition:transform .15s;
   }
-  .rec[open] summary::after{content:"Hide";}
-  .rec summary:hover{background:rgba(192,127,16,.07);}
+  .rec[open] summary::after{transform:translateY(-50%) rotate(180deg);}
+  .rec summary:hover{background:rgba(143,95,6,.08);}
   .rec summary:focus-visible{outline:2px solid var(--amber);outline-offset:-2px;}
 
   .title{
-    font-family:'Bodoni Moda',Georgia,serif;
-    font-size:1.12rem;
-    font-weight:600;
-    line-height:1.25;
+    font-family:'Karla','Helvetica Neue',Arial,sans-serif;
+    font-size:1.02rem;
+    font-weight:700;
+    line-height:1.3;
   }
   .where{
     display:block;
@@ -247,7 +255,7 @@
     color:var(--amber);
     margin-bottom:4px;
   }
-  .det dd{margin:0 0 12px;color:#3a3a36;}
+  .det dd{margin:0 0 12px;color:#262622;}
   .det dd:last-child{margin-bottom:0;}
   .det a{
     color:var(--text);
@@ -255,7 +263,7 @@
     text-decoration:none;
     border-bottom:1px solid var(--amber);
   }
-  .det a:hover{background:rgba(192,127,16,.15);}
+  .det a:hover{background:rgba(143,95,6,.14);}
   .det a:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
 
   footer{
@@ -359,7 +367,8 @@
   @media (max-width:720px){
     .colhead{display:none;}
     .rec summary{grid-template-columns:1fr;gap:5px;padding:11px 4px 40px;}
-    .rec summary::after{top:auto;bottom:12px;left:4px;right:auto;}
+    .rec summary::after{top:16px;bottom:auto;left:auto;right:6px;transform:none;}
+    .rec[open] summary::after{transform:rotate(180deg);}
     .reqbtn{top:auto;bottom:6px;transform:none;}
     .size{text-align:left;}
     .master:not(:empty)::before{content:"Master: ";color:var(--mute);}
@@ -377,7 +386,7 @@
         <option value="new">Newest first</option>
         <option value="old">Oldest first</option>
       </select>
-      <span class="count"><span id="reccount">23</span> recordings</span>
+      <span class="count"><span id="reccount">26</span> recordings</span>
     </div>
   </header>
 
@@ -404,7 +413,7 @@
 
   <details class="rec">
     <summary>
-      <span class="title">American Idiot<span class="where">Deaf West &middot; October 2024</span></span>
+      <span class="title">American Idiot<span class="where">Deaf West &middot; Oct 2024</span></span>
       <span class="master">MTTZ</span>
       <span class="size">8.34 GB</span>
     </summary>
@@ -432,7 +441,7 @@
 
   <details class="rec">
     <summary>
-      <span class="title">Cabaret<span class="where">Fourth Broadway Revival, August Wilson Theatre &middot; April 10, 2025</span></span>
+      <span class="title">Cabaret<span class="where">Fourth Broadway Revival, Aug Wilson Theatre &middot; Apr 10, 2025</span></span>
       <span class="master">bikinibottomday</span>
       <span class="size">11.03 GB</span>
     </summary>
@@ -462,7 +471,7 @@
 
   <details class="rec">
     <summary>
-      <span class="title">The Great Gatsby<span class="where">West End &middot; August 2025</span></span>
+      <span class="title">The Great Gatsby<span class="where">West End &middot; Aug 2025</span></span>
       <span class="master">MTTZ</span>
       <span class="size">9.41 GB</span>
     </summary>
@@ -494,7 +503,7 @@
 
   <details class="rec">
     <summary>
-      <span class="title">Hadestown<span class="where">Walter Kerr Theatre, Broadway &middot; September 2025</span></span>
+      <span class="title">Hadestown<span class="where">Walter Kerr Theatre, Broadway &middot; Sep 2025</span></span>
       <span class="master">bikinibottomday</span>
       <span class="size">9.68 GB</span>
     </summary>
@@ -503,6 +512,20 @@
       <dd>Jack Wolfe (Orpheus), Morgan Dudley (Eurydice), Rebecca Naomi Jones (Persephone), Paulo Szot (Hades), Kurt Elling (Hermes), Shea Renne (Fate), Jessie Shelton (Fate), Kay Trinidad (Fate), Emily Afton (Worker), Malcolm Armwood (Worker), Jeffrey Cornelius (Worker), Sydney Parra (Worker), Alex Puette (Worker)</dd>
       <dt>File</dt>
       <dd>MP4</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Hadestown<span class="where">Walter Kerr Theatre, Broadway &middot; Nov 2025</span></span>
+      <span class="master">MTTZ</span>
+      <span class="size">9.02 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Jack Wolfe (Orpheus), Morgan Dudley (Eurydice), Rebecca Naomi Jones (Persephone), Paulo Szot (Hades), Kurt Elling (Hermes), Sydney Parra (u/s Fate), Kay Trinidad (Fate), Brit West (t/r Fate), Ayla Ciccone-Burton (s/w Worker), Malcolm Armwood (Worker), Jeffrey Cornelius (Worker), KC Dela Cruz (s/w Worker), Alex Puette (Worker)</dd>
+      <dt>Notes</dt>
+      <dd>Excellent capture of this stunning cast! Shot in a great mix of wides, mediums, and close-ups. Some wandering, shaking, and re-adjusting throughout, slightly increased in act 2. Some minor washout and focus issues. Audio is patched in from an external source. Does not include bows or Cups. Overall an incredible capture of this must-see cast.</dd>
     </dl>
   </details>
 
@@ -522,21 +545,7 @@
     </dl>
   </details>
 
-  <details class="rec">
-    <summary>
-      <span class="title">Hadestown<span class="where">Broadway &middot; November 2024</span></span>
-      <span class="master">MTTZ</span>
-      <span class="size"></span>
-    </summary>
-    <dl class="det">
-      <dt>Cast</dt>
-      <dd>Jordan Fisher (Orpheus), Maia Reficco (Eurydice), Malcolm Armwood (u/s Hermes), Phillip Boykin (Hades), Allison Russell (Persephone), Shea Renne (Fate), Jessie Shelton (Fate), Brit West (Fate), Brandon Cameron (s/w Worker), KC Dela Cruz (s/w Worker), Tanner Ray Wilson (s/w Worker), Emily Afton (Worker), Timothy H Lee (Worker)</dd>
-      <dt>Notes</dt>
-      <dd>Excellent capture of this incredible show with Allison Russell joining the cast as Persephone. My first Broadway video! Shot around an annoying moving head that mostly obstructs the bottom left of the stage when present, but it's worked around well and is mostly unobtrusive as well as mostly going away in act 2. Shot in a great mix of wides, mediums, and close-ups. Some increased wandering, shaking, and re-adjusting throughout. Audio is patched in from an external source. Does not include Bows or We Raise Our Cups. Overall a wonderful capture that only gets messy when navigating head obstruction.</dd>
-    </dl>
-  </details>
-
-  <details class="rec">
+    <details class="rec">
     <summary>
       <span class="title">Hadestown<span class="where">West End &middot; Aug 2024</span></span>
       <span class="master">Lasagna</span>
@@ -551,7 +560,7 @@
   <details class="rec">
     <summary>
       <span class="title">Heathers: The Musical<span class="where">West End (Theatre Royal Haymarket) &middot; Nov 24, 2018</span></span>
-      <span class="master"></span>
+      <span class="master">&mdash;</span>
       <span class="size"></span>
     </summary>
     <dl class="det">
@@ -564,7 +573,7 @@
 
   <details class="rec">
     <summary>
-      <span class="title">Heathers: The Musical<span class="where">First Off-Broadway Revival, New World Stages &middot; January 1, 2026 (4)</span></span>
+      <span class="title">Heathers: The Musical<span class="where">First Off-Broadway Revival, New World Stages &middot; Jan 1, 2026 (4)</span></span>
       <span class="master">StarCuffedJeans</span>
       <span class="size">5.93 GB</span>
     </summary>
@@ -576,10 +585,24 @@
     </dl>
   </details>
 
-  <details class="rec">
+    <details class="rec">
+    <summary>
+      <span class="title">Jack Wolfe: 54 Below Concert<span class="where">54 Below, New York &middot; Nov 3, 2024</span></span>
+      <span class="master">Angelofmusicishere</span>
+      <span class="size">5.43 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Jack Wolfe (Performer), Allison Young (g/p Performer)</dd>
+      <dt>File</dt>
+      <dd>MP4</dd>
+    </dl>
+  </details>
+
+<details class="rec">
     <summary>
       <span class="title">The Magician's Elephant<span class="where">Royal Shakespeare Company &middot; 2021</span></span>
-      <span class="master"></span>
+      <span class="master">Proshot</span>
       <span class="size">1.42 GB</span>
     </summary>
     <dl class="det">
@@ -587,6 +610,8 @@
       <dd>Forbes Masson (Police Chief), Amy Booth-Steel (The Narrator), Alastair Parker (Magician), Renu Arora (Madame LaVaughn), Sam Harrison (Count Quintet), Summer Strallen (Countess Quintet), Keisha Amponsa Banson (Gloria Matienne), Marc Antolin (Leo Matienne), Lauren Jones (u/s Adele), Mark Meadows (Vilna Lutz), Jack Wolfe (Peter Duchene)</dd>
       <dt>File</dt>
       <dd>MPEG-4</dd>
+      <dt>Notes</dt>
+      <dd>Posted to YouTube by accident by Marc Teller.</dd>
     </dl>
   </details>
 
@@ -604,7 +629,7 @@
 
   <details class="rec">
     <summary>
-      <span class="title">Moulin Rouge! The Musical<span class="where">West End &middot; January 2023</span></span>
+      <span class="title">Moulin Rouge! The Musical<span class="where">West End &middot; Jan 2023</span></span>
       <span class="master">Lasagna</span>
       <span class="size">9.17 GB</span>
     </summary>
@@ -636,7 +661,7 @@
 
   <details class="rec">
     <summary>
-      <span class="title">Next to Normal<span class="where">Donmar Warehouse, London &middot; September 1, 2023</span></span>
+      <span class="title">Next to Normal<span class="where">Donmar Warehouse, London &middot; Sep 1, 2023</span></span>
       <span class="master">Lasagna</span>
       <span class="size">9.08 GB</span>
     </summary>
@@ -650,7 +675,23 @@
 
   <details class="rec">
     <summary>
-      <span class="title">Next to Normal<span class="where">West End &middot; July 2024</span></span>
+      <span class="title">Next to Normal<span class="where">Off-West End (Donmar Warehouse) &middot; Sep 2023</span></span>
+      <span class="master">sassysnowglobe</span>
+      <span class="size">13.56 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Caissie Levy (Diana), Jamie Parker (Dan), Jack Wolfe (Gabe), Eleanor Worthington-Cox (Natalie), Jack Ofrecio (Henry), Trevor Dion Nicholas (Dr. Fine/Dr. Madden)</dd>
+      <dt>File</dt>
+      <dd>MP4, 2 acts</dd>
+      <dt>Notes</dt>
+      <dd>Steady cam, shot from dress circle.</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Next to Normal<span class="where">West End &middot; Jul 2024</span></span>
       <span class="master">MTTZ</span>
       <span class="size">8.98 GB</span>
     </summary>
@@ -661,6 +702,24 @@
       <dd>MP4 (4K) &middot; NFT until December 5, 2024</dd>
       <dt>Notes</dt>
       <dd>Fantastic capture of this incredible West End transfer. Shot in a beautiful mix of wides, mediums, and close-ups. More wides than usual to catch the simply amazing staging and blocking. Some increased wandering, shaking, and re-adjusting throughout, as well as my backpack occasionally blocking the very bottom of the stage, but nothing is missed. The overhang cuts off the very top of the set and occasionally obscures faces when they're far back in the top rooms. Some non-disruptive rustling heard throughout. Truly an excellent capture of this excellent show.</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Next to Normal<span class="where">West End (Wyndham's Theatre) &middot; Jul 2024</span></span>
+      <span class="master">Jagweed</span>
+      <span class="size">9.36 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Caissie Levy (Diana Goodman), Jamie Parker (Dan Goodman), Eleanor Worthington Cox (Natalie Goodman), Jack Wolfe (Gabriel "Gabe" Goodman), Jack Ofrecio (Henry), Trevor Dion Nicholas (Dr. Madden/Dr. Fine)</dd>
+      <dt>File</dt>
+      <dd>MP4 &middot; Filmed in 4K, external audio used</dd>
+      <dt>NFT / Terms</dt>
+      <dd>NFT until Jan 30, 2025 &middot; Do not resell or gift &middot; Do not share screencaps, clips, or the video online anywhere</dd>
+      <dt>Notes</dt>
+      <dd>A perfect capture of the West End transfer. The cast have only gotten better since the Donmar run. Filmed head on instead of from the side, like my previous capture, so you can see the actors' expressions clearly and get a clear view of the set and staging. A must-have capture for fans of the show and this production. Recording includes the curtain call and marquee.</dd>
     </dl>
   </details>
 
@@ -680,7 +739,7 @@
 
   <details class="rec">
     <summary>
-      <span class="title">Spring Awakening<span class="where">Eugene O'Neill Theatre, Broadway &middot; February 10, 2007</span></span>
+      <span class="title">Spring Awakening<span class="where">Eugene O'Neill Theatre, Broadway &middot; Feb 10, 2007</span></span>
       <span class="master">SunsetBlvd79</span>
       <span class="size">3.77 GB</span>
     </summary>
@@ -696,7 +755,7 @@
 
   <details class="rec">
     <summary>
-      <span class="title">Spring Awakening (Sheik/Sater): West End 15th Anniversary Reunion Concert<span class="where">Victoria Palace Theatre, London &middot; June 2, 2024</span></span>
+      <span class="title">Spring Awakening (Sheik/Sater): West End 15th Anniversary Reunion Concert<span class="where">Victoria Palace Theatre, London &middot; Jun 2, 2024</span></span>
       <span class="master">Jagweed</span>
       <span class="size">9.06 GB</span>
     </summary>
@@ -712,7 +771,7 @@
 
   <details class="rec">
     <summary>
-      <span class="title">The Unlikely Pilgrimage of Harold Fry<span class="where">West End &middot; February 2026</span></span>
+      <span class="title">The Unlikely Pilgrimage of Harold Fry<span class="where">West End &middot; Feb 2026</span></span>
       <span class="master">MTTZ</span>
       <span class="size">8.52 GB</span>
     </summary>
@@ -730,7 +789,7 @@
 
   <details class="rec">
     <summary>
-      <span class="title">West Side Story<span class="where">Leicester Curve &middot; December 2019</span></span>
+      <span class="title">West Side Story<span class="where">Leicester Curve &middot; Dec 2019</span></span>
       <span class="master">hitmewithyourbethshot</span>
       <span class="size">13.33 GB</span>
     </summary>
@@ -751,7 +810,7 @@
 
   <details class="rec">
     <summary>
-      <span class="title">Cabaret<span class="where">Fifth West End Revival &middot; July 8, 2026 (Matinee)</span></span>
+      <span class="title">Cabaret<span class="where">Fifth West End Revival &middot; Jul 8, 2026 (Matinee)</span></span>
       <span class="master">bobbyskazoo</span>
       <span class="size">451.4 MB</span>
     </summary>
@@ -769,7 +828,7 @@
 
   <details class="rec">
     <summary>
-      <span class="title">Jamie Muscato in Concert: Live 2026<span class="where">Theatre Royal Drury Lane, London &middot; March 22, 2026 (matinee)</span></span>
+      <span class="title">Jamie Muscato in Concert: Live 2026<span class="where">Theatre Royal Drury Lane, London &middot; Mar 22, 2026 (matinee)</span></span>
       <span class="master">teenytinysandwiches</span>
       <span class="size">54.3 MB</span>
     </summary>
@@ -789,7 +848,7 @@
 
   <details class="rec">
     <summary>
-      <span class="title">Jamie Muscato in Concert: Live 2026<span class="where">Theatre Royal Drury Lane, London &middot; March 22, 2026 (evening)</span></span>
+      <span class="title">Jamie Muscato in Concert: Live 2026<span class="where">Theatre Royal Drury Lane, London &middot; Mar 22, 2026 (evening)</span></span>
       <span class="master">teenytinysandwiches</span>
       <span class="size">53.9 MB</span>
     </summary>
@@ -814,7 +873,7 @@
 
   <section id="reqform" aria-label="Trade request">
     <h2>Request a trade</h2>
-    <p class="hint">Open any entry above and hit "Add to request" &mdash; your picks collect here. Then open the request form; your picks carry over automatically.</p>
+    <p class="hint">Hit "+ Request" on anything you want and open the form below, your picks will already be filled in. If I haven't gotten back to you in a few days, just ping me on Reddit or Discord.</p>
 
     <label for="r-want">Requesting</label>
     <textarea id="r-want" placeholder="Add entries from the list above, or type them here"></textarea>
@@ -1037,6 +1096,26 @@
     var w=rec.querySelector('.where');
     return name+(w?' ('+w.textContent.trim()+')':'');
   }
+  function injectLeads(){
+    Array.prototype.forEach.call(document.querySelectorAll('.rec'),function(rec){
+      var t=rec.querySelector('.title');
+      if(!t||t.querySelector('.leads')) return;
+      var castDd=null;
+      Array.prototype.forEach.call(rec.querySelectorAll('.det dt'),function(dt){
+        if(!castDd&&/cast/i.test(dt.textContent)) castDd=dt.nextElementSibling;
+      });
+      if(!castDd) return;
+      var names=castDd.textContent.split(/\),\s*/).slice(0,2).map(function(seg){
+        return seg.split('(')[0].trim();
+      }).filter(Boolean);
+      if(!names.length) return;
+      var span=document.createElement('span');
+      span.className='leads';
+      span.textContent=names.join(' \u00b7 ');
+      t.appendChild(span);
+    });
+  }
+
   function injectReqButtons(){
     Array.prototype.forEach.call(document.querySelectorAll('.rec'),function(rec){
       if(rec.querySelector('.reqbtn')) return;
@@ -1089,6 +1168,7 @@
 
   /* ---------- init ---------- */
   applyView();
+  injectLeads();
   injectReqButtons();
   applySearch();
 })();
