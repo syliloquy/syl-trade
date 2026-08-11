@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trading List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,600&family=Karla:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f2f2f0;
+    --card:#ffffff;
+    --line:#dcdcd8;
+    --text:#111111;
+    --mute:#6f6f6a;
+    --amber:#c07f10;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    padding:clamp(24px,4vw,44px) clamp(14px,4vw,32px) 60px;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Karla','Helvetica Neue',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px;margin:0 auto;}
+
+  header{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+    padding-bottom:12px;
+    border-bottom:2px solid var(--text);
+    margin-bottom:4px;
+  }
+  h1{
+    font-family:'Bodoni Moda',Georgia,serif;
+    font-weight:600;
+    font-size:clamp(1.7rem,5vw,2.3rem);
+    margin:0;
+    line-height:1;
+  }
+  .count{
+    font-family:'Space Mono',monospace;
+    font-size:.68rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--amber);
+  }
+  .headright{display:flex;align-items:baseline;gap:16px;}
+  #sortbtn{
+    font-family:'Space Mono',monospace;
+    font-size:.62rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    padding:6px 12px;
+    background:none;
+    border:1px solid var(--text);
+    border-radius:4px;
+    color:var(--text);
+    cursor:pointer;
+  }
+  #sortbtn:hover{background:var(--text);color:#fff;}
+  #sortbtn:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+
+  .tabs{display:flex;gap:6px;margin-top:18px;}
+  .tab{
+    font-family:'Space Mono',monospace;
+    font-size:.66rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    padding:8px 16px;
+    background:none;
+    border:1px solid var(--line);
+    border-bottom:none;
+    border-radius:6px 6px 0 0;
+    color:var(--mute);
+    cursor:pointer;
+  }
+  .tab.active{
+    background:var(--card);
+    color:var(--text);
+    border-color:var(--text);
+    font-weight:700;
+  }
+  .tab:focus-visible{outline:2px solid var(--amber);outline-offset:-2px;}
+  .pane{display:none;}
+  .pane.active{display:block;}
+
+  .searchwrap{margin:14px 0 2px;}
+  #search{
+    width:100%;
+    padding:10px 14px;
+    font-family:'Karla',sans-serif;
+    font-size:.9rem;
+    border:1px solid var(--line);
+    border-radius:6px;
+    background:#fff;
+    color:var(--text);
+  }
+  #search:focus{outline:2px solid var(--amber);outline-offset:0;border-color:transparent;}
+  #noresults{
+    display:none;
+    padding:22px 4px;
+    font-size:.86rem;
+    color:var(--mute);
+    font-style:italic;
+  }
+
+  .group{
+    margin:14px 0 18px;
+  }
+  .group-head{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    padding:10px 12px;
+    background:#e6e6e2;
+    border-radius:6px 6px 0 0;
+  }
+  .group-head .gname{
+    font-family:'Bodoni Moda',Georgia,serif;
+    font-weight:600;
+    font-size:1.25rem;
+    color:var(--text);
+  }
+  .group-head .gcount{
+    font-family:'Space Mono',monospace;
+    font-size:.6rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--amber);
+  }
+  .group .rec{
+    background:#faf8f2;
+    border-left:3px solid var(--amber);
+    border-bottom:1px solid var(--line);
+  }
+  .group .rec:last-child{border-radius:0 0 6px 6px;}
+  .group .rec summary{padding-left:30px;}
+  .group .det{padding-left:30px;}
+  .in-group summary .title::before{
+    content:"\25B8";
+    position:absolute;
+    left:12px;
+    color:var(--amber);
+  }
+  .in-group[open] summary .title::before{content:"\25BE";}
+  .in-group .showname{display:none;}
+  .in-group .where{
+    font-family:'Karla',sans-serif;
+    font-size:.92rem;
+    font-weight:600;
+    color:var(--text);
+    margin-top:0;
+  }
+
+  .colhead{
+    display:grid;
+    grid-template-columns:1fr 140px 84px;
+    gap:14px;
+    font-family:'Space Mono',monospace;
+    font-size:.58rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--mute);
+    padding:10px 30px 8px 4px;
+  }
+
+  .rec{border-bottom:1px solid var(--line);}
+  .rec summary{
+    display:grid;
+    grid-template-columns:1fr 140px 84px;
+    gap:14px;
+    align-items:baseline;
+    padding:11px 190px 11px 4px;
+    cursor:pointer;
+    list-style:none;
+    position:relative;
+  }
+  .rec summary::-webkit-details-marker{display:none;}
+  .rec summary::after{
+    content:"Click to view Cast/Notes";
+    position:absolute;
+    right:8px;
+    top:14px;
+    font-family:'Space Mono',monospace;
+    font-size:.58rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--mute);
+  }
+  .rec[open] summary::after{content:"Hide";}
+  .rec summary:hover{background:rgba(192,127,16,.07);}
+  .rec summary:focus-visible{outline:2px solid var(--amber);outline-offset:-2px;}
+
+  .title{
+    font-family:'Bodoni Moda',Georgia,serif;
+    font-size:1.12rem;
+    font-weight:600;
+    line-height:1.25;
+  }
+  .where{
+    display:block;
+    font-size:.79rem;
+    color:var(--mute);
+    margin-top:2px;
+    font-family:'Karla',sans-serif;
+    font-weight:400;
+  }
+  .master,.size{
+    font-family:'Space Mono',monospace;
+    font-size:.76rem;
+  }
+  .size{text-align:right;}
+
+  .det{
+    padding:2px 30px 20px 4px;
+    font-size:.84rem;
+    line-height:1.6;
+  }
+  .det dt{
+    font-family:'Space Mono',monospace;
+    font-size:.58rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-bottom:4px;
+  }
+  .det dd{margin:0 0 12px;color:#3a3a36;}
+  .det dd:last-child{margin-bottom:0;}
+  .det a{
+    color:var(--text);
+    font-family:'Space Mono',monospace;
+    text-decoration:none;
+    border-bottom:1px solid var(--amber);
+  }
+  .det a:hover{background:rgba(192,127,16,.15);}
+  .det a:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+
+  footer{
+    margin-top:26px;
+    font-size:.76rem;
+    color:var(--mute);
+  }
+
+
+  @media (max-width:720px){
+    .colhead{display:none;}
+    .rec summary{grid-template-columns:1fr;gap:5px;padding:11px 4px 30px;}
+    .rec summary::after{top:auto;bottom:10px;left:4px;right:auto;}
+    .size{text-align:left;}
+    .master:not(:empty)::before{content:"Master: ";color:var(--mute);}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Trading List</h1>
+    <div class="headright">
+      <button type="button" id="sortbtn" aria-label="Sort list">Sort: A&ndash;Z</button>
+      <span class="count"><span id="reccount">20</span> recordings</span>
+    </div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button type="button" class="tab active" id="tab-video" role="tab" aria-selected="true">Video</button>
+    <button type="button" class="tab" id="tab-audio" role="tab" aria-selected="false">Audio Only</button>
+  </div>
+
+  <div class="searchwrap">
+    <input type="search" id="search" placeholder="Search titles or cast names&hellip;" aria-label="Search titles or cast names">
+  </div>
+  <p id="noresults">No matches.</p>
+
+  <div class="pane active" id="pane-video">
+  <div class="colhead"><span>Title / venue / date</span><span>Master</span><span style="text-align:right">Size</span></div>
+
+  <div id="list">
+
+  <details class="rec">
+    <summary>
+      <span class="title">American Idiot<span class="where">Deaf West &middot; October 2024</span></span>
+      <span class="master">MTTZ</span>
+      <span class="size">8.34 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Daniel Durant (Johnny), Milo Manheim (Voice of Johnny), Otis Jones IV (Will), James Olivas (Voice of Will), Landen Gonzales (Tunny), Brady Fritz (Voice of Tunny), Ali Fumiko Whitney (Heather), Mars Storm Rucker (Whatsername), Mason Alexander Park (St. Jimmy), Kaia T. Fitzgerald (Extraordinary Girl), Jerusha Cavazos (Voice of Extraordinary Girl), Will Branner (Favorite Son), Monika Pe&ntilde;a (Alysha), Steven-Adam Agdeppa (Ensemble), Lark Detweiler (Ensemble), Josu&eacute; Martinez (Ensemble), Angel Theory (Ensemble), Mia Sempertegui (Ensemble)</dd>
+      <dt>File</dt>
+      <dd>MP4 (4K)</dd>
+      <dt>Notes</dt>
+      <dd>Excellent capture of this incredibly transformative production in previews! Shot in a great mix of wides, mediums, and close-ups, wider than usual overall due to the nature of the staging. Obstruction on the bottom left of the stage that only blocks some minor action and is worked around well. Some wandering, shaking, and re-adjusting throughout. A couple of brief dropouts. Does not include the post-bows song. Audio is patched in from an external source. Overall a wonderful capture.</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Cabaret<span class="where">Kit Kat Club at the Playhouse Theatre, West End &middot; Jan 2022</span></span>
+      <span class="master">Jagweed</span>
+      <span class="size">9.48 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Eddie Redmayne (Emcee), Jessie Buckley (Sally Bowles), Omari Douglas (Cliff), Liza Sadovy (Fraulein Schneider), Elliot Levey (Herr Schultz), Stewart Clarke (Ernst Ludwig), Anna-Jane Casey (Fraulein Kost/Fritzie)</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Cabaret<span class="where">Fourth Broadway Revival, August Wilson Theatre &middot; April 10, 2025</span></span>
+      <span class="master">bikinibottomday</span>
+      <span class="size">11.03 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Orville Peck (Emcee), Eva Noblezada (Sally Bowles), Calvin Leon Smith (Clifford Bradshaw), Ellen Harvey (Fr&auml;ulein Schneider), Steven Skybell (Herr Schultz), Henry Gottfried (Ernst Ludwig), Corinne Munsch (u/s Fr&auml;ulein Kost/Fritzie), Gabi Campo (Frenchie), Price Waldman (Max/Herman), Marty Lauter (Victor), David Merino (Lulu), Julian Ramos (Bobby), Paige Smallwood (Rosie), Jada Simone Clark (Helga), Colin Cunliffe (Hans), Christian Kidd (s/w Texas)</dd>
+      <dt>File</dt>
+      <dd>MP4</dd>
+      <dt>Notes</dt>
+      <dd>Excellent 4K capture of the new cast! Some wandering and unfocusing throughout. Includes curtain call and the post-show BC/EFA speech, audio is fed from external source.</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">The Great Gatsby<span class="where">Paper Mill Playhouse &middot; Oct 25, 2023</span></span>
+      <span class="master">StarCuffedJeans</span>
+      <span class="size">6.17 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Jeremy Jordan (Jay Gatsby), Eva Noblezada (Daisy Buchanan), Noah J. Ricketts (Nick Carraway), Samantha Pauly (Jordan Baker), Sara Chase (Myrtle Wilson), Stanley Wayne Mathis (Meyer Wolfsheim), John Zdrojeski (Tom Buchanan), Paul Whitty (George Wilson), Dan Rosales (Mr. McKee), Dariana Mullen (Gilda Gray), Ayla Ciccone-Burton (Mrs. McKee/Twin), Natalie Charle Ellis (Catherine), Pascal Pastrana (Cop), Maya Sistruck (Twin/Ensemble), Colin Cunliffe (Ol' Owl Eyes), Raymond Baynard, Austin Colby, Curtis Holland, Mariah Reives, Julio Rey, Tanairi Sade Vazquez, Katie Webber (Ensemble)</dd>
+      <dt>File</dt>
+      <dd>MP4 (HD) &middot; 02:10:30</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Hadestown<span class="where">Walter Kerr Theatre, Broadway &middot; Sep 2025</span></span>
+      <span class="master">StarCuffedJeans</span>
+      <span class="size">5.92 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Jack Wolfe (Orpheus), Morgan Dudley (Eurydice), Rebecca Naomi Jones (Persephone), Paulo Szot (Hades), Kurt Elling (Hermes), Jessie Shelton (Fate), Kay Trinidad (Fate), Shea Renne (Fate), Emily Afton, Malcolm Armwood, Jeffrey Cornelius, Sydney Parra, Alex Puette (Workers)</dd>
+      <dt>File</dt>
+      <dd>MP4 (HD)</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Hadestown<span class="where">Walter Kerr Theatre, Broadway &middot; September 2025</span></span>
+      <span class="master">bikinibottomday</span>
+      <span class="size">9.68 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Jack Wolfe (Orpheus), Morgan Dudley (Eurydice), Rebecca Naomi Jones (Persephone), Paulo Szot (Hades), Kurt Elling (Hermes), Shea Renne (Fate), Jessie Shelton (Fate), Kay Trinidad (Fate), Emily Afton (Worker), Malcolm Armwood (Worker), Jeffrey Cornelius (Worker), Sydney Parra (Worker), Alex Puette (Worker)</dd>
+      <dt>File</dt>
+      <dd>MP4</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Hadestown<span class="where">Broadway &middot; May 29, 2024</span></span>
+      <span class="master">Medium Observation</span>
+      <span class="size">10.72 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Jordan Fisher (Orpheus), Isa Briones (Eurydice), Ani DiFranco (Persephone), Phillip Boykin (Hades), Jon Jon Briones (Hermes), Jessie Shelton (Fate), Kay Trinidad (Fate), Brit West (Fate), Malcolm Armwood (Worker), Sayo Oni (Worker), Emily Afton (Worker), Alex Puette (Worker), Grace Yoo (Worker)</dd>
+      <dt>File</dt>
+      <dd>MP4</dd>
+      <dt>Notes</dt>
+      <dd>There is a brief 30 second blackout at the end of Road to Hell. Some readjusting and shakiness is seen throughout. Includes We Raise Our Cups.</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Hadestown<span class="where">Broadway &middot; November 2024</span></span>
+      <span class="master">MTTZ</span>
+      <span class="size"></span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Jordan Fisher (Orpheus), Maia Reficco (Eurydice), Malcolm Armwood (u/s Hermes), Phillip Boykin (Hades), Allison Russell (Persephone), Shea Renne (Fate), Jessie Shelton (Fate), Brit West (Fate), Brandon Cameron (s/w Worker), KC Dela Cruz (s/w Worker), Tanner Ray Wilson (s/w Worker), Emily Afton (Worker), Timothy H Lee (Worker)</dd>
+      <dt>Notes</dt>
+      <dd>Excellent capture of this incredible show with Allison Russell joining the cast as Persephone. My first Broadway video! Shot around an annoying moving head that mostly obstructs the bottom left of the stage when present, but it's worked around well and is mostly unobtrusive as well as mostly going away in act 2. Shot in a great mix of wides, mediums, and close-ups. Some increased wandering, shaking, and re-adjusting throughout. Audio is patched in from an external source. Does not include Bows or We Raise Our Cups. Overall a wonderful capture that only gets messy when navigating head obstruction.</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Hadestown<span class="where">West End &middot; Aug 2024</span></span>
+      <span class="master">Lasagna</span>
+      <span class="size">10.18 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>D&oacute;nal Finn (Orpheus), Grace Hodgett-Young (Eurydice), Gloria Onitiri (Persephone), Zachary James (Hades), Melanie La Barrie (Hermes), Bella Brown (Fate), Madeline Charlemagne (Fate), Allie Daniel (Fate), Ryesha Higgs (s/w Worker)</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Heathers: The Musical<span class="where">West End (Theatre Royal Haymarket) &middot; Nov 24, 2018</span></span>
+      <span class="master"></span>
+      <span class="size"></span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Carrie Hope Fletcher (Veronica Sawyer), Jamie Muscato (Jason "J.D." Dean), Jodie Steele (Heather Chandler), T'Shan Williams (Heather Duke), Sophie Isaacs (Heather McNamara), Dominic Andersen (Ram Sweeney), Christopher Chung (Kurt Kelly), Jenny O'Leary (Martha Dunnstock), Amy Booth-Steel (Ms. Fleming/Veronica's Mom), Nathan Amzi (Ram's Dad/Big Bud Dean/Coach Ripper), Brandon Lee Sears (u/s Kurt's Dad/u/s Veronica's Dad/u/s Principal Gowan), Alex James-Hatton (Beleaguered Geek/Officer Milner), John Lumsden (Hipster Dork/u/s Officer McCord), Lauren Drew (New Wave Party Girl), Charlotte Jaconelli (Stoner Chick), Olivia Moore (Young Republicanette), Merryl Ansah (Drama Club Drama Queen)</dd>
+      <dt>File</dt>
+      <dd>In a folder as 5 VOD files</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Heathers: The Musical<span class="where">First Off-Broadway Revival, New World Stages &middot; January 1, 2026 (4)</span></span>
+      <span class="master">StarCuffedJeans</span>
+      <span class="size">5.93 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Kuhoo Verma (Veronica Sawyer), Casey Likes (Jason "J.D." Dean), Jodie Steele (t/r Heather Chandler), Jackera Davis (Heather Duke), Elizabeth Teeter (Heather McNamara), Xavier McKinnon (Ram Sweeney), Kerry Butler (Ms. Fleming/Veronica's Mom), Ben Davis (Ram's Dad/Big Bud Dean/Coach Ripper), Brian Martin (u/s Kurt's Dad/u/s Veronica's Dad/u/s Principal Gowan), James Caleb Grice (Beleaguered Geek/Officer McCord), Devin Lewis (Hipster Dork), Cecilia Trippiedi (New Wave Party Girl), Syd Sider (Stoner Chick), Lav Raman (s/w Drama Club Drama Queen), Louis Griffin (s/w Fresh Prince of Ohio/s/w Officer Milner)</dd>
+      <dt>File</dt>
+      <dd>MP4</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">The Magician's Elephant<span class="where">Royal Shakespeare Company &middot; 2021</span></span>
+      <span class="master"></span>
+      <span class="size">1.42 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Forbes Masson (Police Chief), Amy Booth-Steel (The Narrator), Alastair Parker (Magician), Renu Arora (Madame LaVaughn), Sam Harrison (Count Quintet), Summer Strallen (Countess Quintet), Keisha Amponsa Banson (Gloria Matienne), Marc Antolin (Leo Matienne), Lauren Jones (u/s Adele), Mark Meadows (Vilna Lutz), Jack Wolfe (Peter Duchene)</dd>
+      <dt>File</dt>
+      <dd>MPEG-4</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Maybe Happy Ending<span class="where">Broadway &middot; May 28, 2025</span></span>
+      <span class="master">onehandonmycamera</span>
+      <span class="size">11.65 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Darren Criss (Oliver), Helen J. Shen (Claire), Dez Duron (Gil Brentley), Marcus Choi (James)</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Moulin Rouge! The Musical<span class="where">West End &middot; January 2023</span></span>
+      <span class="master">Lasagna</span>
+      <span class="size">9.17 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Vanessa Ela Young (alt Satine), Jamie Muscato (Christian), Craig Ryder (u/s Harold Zidler), Ben Richards (The Duke of Monroth), Ian Carlyle (Toulouse-Lautrec), Elia Lo Tauro (Santiago), Amy Thornton (Nini), Elliotte Williams N'Dure (La Chocolat), Melissa Nettleford (u/s Arabia), Tiago Dhondt Bamberger (Baby Doll)</dd>
+      <dt>File</dt>
+      <dd>MP4</dd>
+      <dt>Notes</dt>
+      <dd>Great capture of Vanessa as Satine! Shot around heads but all the action is captured well.</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Natasha, Pierre, and the Great Comet of 1812<span class="where">Off-West End, Donmar Warehouse &middot; Jan 1, 2025</span></span>
+      <span class="master">Jagweed</span>
+      <span class="size">8.98 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Chumisa Dornford-May (Countess Natasha Rostova), Declan Bennett (Pierre Bezukhov), Maimuna Memon (Sonya Rostova), Annette McLaughlin (Marya Dimitriyevna), Jamie Muscato (Anatole Kuragin), Cat Simmons (H&eacute;l&egrave;ne Kuragina Bezukhova), Daniel Krikler (Fedya Dolokhov), Eugene McCoy (Old Prince Nikolay Bolkonsky/Prince Andrey Bolkonsky), Chloe Saracco (Princess Mary Bolkonskaya), Cedric Neal (Balaga), Andrew Berlin (Ensemble), Kimberly Blake (Ensemble), Ali Goldsmith (Ensemble), Chihiro Kawasaki (Ensemble), Nitai Levi (Ensemble), Annie Majin (Ensemble)</dd>
+      <dt>File</dt>
+      <dd>MP4</dd>
+      <dt>Notes</dt>
+      <dd>Filmed in 4K. External audio used. An excellent capture. Some focus issues but nothing major. For about 7 minutes in Act Two there is a tech issue with an AC-like sound from a machine. I've done my best to minimise the sound as much as I can but it can still be heard. Recording includes the curtain call and a shot of the outside of the theatre.</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Next to Normal<span class="where">Donmar Warehouse, London &middot; September 1, 2023</span></span>
+      <span class="master">Lasagna</span>
+      <span class="size">9.08 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Caissie Levy (Diana), Jamie Parker (Dan), Jack Wolfe (Gabe), Eleanor Worthington-Cox (Natalie), Jack Ofrecio (Henry), Trevor Dion Nicholas (Dr. Fine/Dr. Madden)</dd>
+      <dt>File</dt>
+      <dd>MP4</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Next to Normal<span class="where">West End (Wyndham's Theatre) &middot; Sep 2024</span></span>
+      <span class="master">Proshot</span>
+      <span class="size"></span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Caissie Levy (Diana), Jamie Parker (Dan), Jack Wolfe (Gabe), Eleanor Worthington-Cox (Natalie), Jack Ofrecio (Henry), Trevor Dion Nicholas (Dr. Fine/Dr. Madden)</dd>
+      <dt>Notes</dt>
+      <dd>Uncensored proshot with time code</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Spring Awakening<span class="where">Eugene O'Neill Theatre, Broadway &middot; February 10, 2007</span></span>
+      <span class="master">SunsetBlvd79</span>
+      <span class="size">3.77 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Jonathan Groff (Melchior Gabor), Lea Michele (Wendla Bergmann), John Gallagher Jr. (Moritz Stiefel), Phoebe Strole (u/s Ilse Neumann), Lilli Cooper (Martha Bessell), Jonathan B. Wright (Hanschen Rilow), Brian Charles Johnson (Otto Lammermeier), Skylar Astin (Georg Zirschnitz), Remy Zaken (Thea), Krysta Rodriguez (u/s Anna), Gideon Glick (Ernst Robel), Frances Mercanti-Anthony (u/s The Adult Women), Stephen Spinella (The Adult Men)</dd>
+      <dt>File</dt>
+      <dd>VOB + smalls</dd>
+      <dt>Notes</dt>
+      <dd>AMAZING capture, closeups, performances. Not to be missed. Content warning: there is partial nudity in this bootleg.</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Spring Awakening: 15th Anniversary Reunion Concert<span class="where">Victoria Palace Theatre, West End &middot; June 2, 2024</span></span>
+      <span class="master">Jagweed</span>
+      <span class="size">9.06 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Jamie Muscato (Melchior Gabor), Charlotte Wakefield (Wendla Bergmann), Jack Wolfe (Moritz Stiefel)</dd>
+      <dt>File</dt>
+      <dd>MP4</dd>
+      <dt>Notes</dt>
+      <dd>A few short focus issues throughout. The top of a head sometimes appears at the bottom of the screen. It never obstructs anything. Recording includes the curtain call and a shot of the outside of the theatre. Filmed in 4K. External audio used.</dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">West Side Story<span class="where">Leicester Curve &middot; December 2019</span></span>
+      <span class="master">hitmewithyourbethshot</span>
+      <span class="size">13.33 GB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Jamie Muscato (Tony), Adriana Ivelisse (Maria), Ronan Burns (Riff), Carly Mercedes Dyer (Anita), Jonathan Hermosa-Lopez (Bernardo), Isaac Gryn (Action), Damian Buhagiar (Chino), Alex Christian (Baby John), Ryan Anderson (A-Rab), Michael O'Reilly (Diesel), Beth Hinton-Lever (Anybodys), Dale White (Big Deal), Darren Bennett (Lt. Schrank/Glad Hand), Christopher Wright (Doc/Officer Krupke), Thea Bunting (Graziella), Mireia Mambo (Rosalia), Katie Lee (Velma), Richard Appiah-Sarpong (Pepe), Dominic Sibanda (Indio), Abigail Climer (Consuelo)</dd>
+      <dt>File</dt>
+      <dd>MTS</dd>
+    </dl>
+  </details>
+
+  </div><!-- /list -->
+  </div><!-- /pane-video -->
+
+  <div class="pane" id="pane-audio">
+  <div class="colhead"><span>Title / venue / date</span><span>Master</span><span style="text-align:right">Size</span></div>
+  <div id="list-audio">
+
+  <details class="rec">
+    <summary>
+      <span class="title">Cabaret<span class="where">Fifth West End Revival &middot; July 8, 2026 (Matinee)</span></span>
+      <span class="master">bobbyskazoo</span>
+      <span class="size">451.4 MB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Jamie Muscato (Emcee), Joy Woods (Sally Bowles), Baker Mukasa (Clifford Bradshaw), Jessica Kirton (u/s Fr&auml;ulein Schneider), Adrian Grove (u/s Herr Schultz), Lucas Koch (Ernst Ludwig), Alexandra Regan (u/s Fr&auml;ulein Kost/Fritzie), Danny Fogarty (s/w Max/Herman), Xavion Campbell Brown (Bobby), Ben Simon-Wilson (e/c Victor), Eva-Rose Tanaka (Frenchie), Hicaro Nicolai (Lulu), Lucy Young (s/w Rosie), Olivia-Rose Deer (Helga), Anya Ferdinand (Texas), Tom Scanlon (Hans)</dd>
+      <dt>File</dt>
+      <dd>M4A (untracked)</dd>
+      <dt>Notes</dt>
+      <dd>Only Joy Woods could get me to see this production again. Clear audio recorded from a table; occasional chatter around me.</dd>
+      <dt>Encora</dt>
+      <dd><a href="https://encora.it/recordings/2035559" target="_blank" rel="noopener">2035559</a></dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Jamie Muscato in Concert: Live 2026<span class="where">Theatre Royal Drury Lane, London &middot; March 22, 2026 (matinee)</span></span>
+      <span class="master">teenytinysandwiches</span>
+      <span class="size">54.3 MB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Jamie Muscato, with guest performers Eloise and Jack Wolfe</dd>
+      <dt>File</dt>
+      <dd>Tracked and untracked M4A &middot; 01:46:43</dd>
+      <dt>NFT / Gifting</dt>
+      <dd>NFT until May 19, 2026 &middot; Never Gift</dd>
+      <dt>Notes</dt>
+      <dd>Our beloved sleep-deprived Jamie &lt;3 What a trooper. Includes untracked audio, tracked songs, tracked banter, program, professional photos by Rich Southgate and Danny Kaan, lyrics, and transcript of banter.</dd>
+      <dt>Encora</dt>
+      <dd><a href="https://encora.it/recordings/2033001" target="_blank" rel="noopener">2033001</a></dd>
+    </dl>
+  </details>
+
+  <details class="rec">
+    <summary>
+      <span class="title">Jamie Muscato in Concert: Live 2026<span class="where">Theatre Royal Drury Lane, London &middot; March 22, 2026 (evening)</span></span>
+      <span class="master">teenytinysandwiches</span>
+      <span class="size">53.9 MB</span>
+    </summary>
+    <dl class="det">
+      <dt>Cast</dt>
+      <dd>Jamie Muscato, with guest performers Eloise and Jack Wolfe</dd>
+      <dt>File</dt>
+      <dd>Tracked and untracked M4A &middot; 01:45:47</dd>
+      <dt>NFT / Gifting</dt>
+      <dd>NFT until May 19, 2026 &middot; Never Gift</dd>
+      <dt>Notes</dt>
+      <dd>And then he went straight back to Edinburgh after this show and STILL didn't sleep?? Jamie! I asked him the following Tuesday if he'd caught up on sleep yet and he said, "Not quite." Includes untracked audio, tracked songs, tracked banter, program, professional photos by Rich Southgate and Danny Kaan, lyrics, and transcript of banter.</dd>
+      <dt>Encora</dt>
+      <dd><a href="https://encora.it/recordings/2033002" target="_blank" rel="noopener">2033002</a></dd>
+    </dl>
+  </details>
+
+  </div><!-- /list-audio -->
+  </div><!-- /pane-audio -->
+
+  <footer>Click a title for cast, file details, and notes.</footer>
+
+</div>
+
+<script>
+(function(){
+  var tabVideo=document.getElementById('tab-video'),
+      tabAudio=document.getElementById('tab-audio'),
+      paneVideo=document.getElementById('pane-video'),
+      paneAudio=document.getElementById('pane-audio'),
+      searchBox=document.getElementById('search'),
+      noResults=document.getElementById('noresults');
+
+  function activeList(){
+    return paneVideo.classList.contains('active')
+      ? document.getElementById('list')
+      : document.getElementById('list-audio');
+  }
+
+  /* ---------- title helpers ---------- */
+  function wrapShowname(rec){
+    var t=rec.querySelector('.title');
+    if(t.querySelector('.showname')) return;
+    var node=t.firstChild; /* the raw title text node */
+    if(node && node.nodeType===3){
+      var span=document.createElement('span');
+      span.className='showname';
+      span.textContent=node.textContent;
+      t.replaceChild(span,node);
+    }
+  }
+  function showName(rec){
+    var s=rec.querySelector('.showname');
+    return s?s.textContent.trim():'';
+  }
+  function groupKey(rec){
+    return showName(rec).toLowerCase()
+      .replace(/^the\s+/,'')
+      .split(':')[0].trim();
+  }
+  function groupLabel(rec){
+    return showName(rec).split(':')[0].trim();
+  }
+
+  /* ---------- grouping ---------- */
+  function regroup(list, alphabetical){
+    var recs=Array.prototype.slice.call(list.querySelectorAll('.rec'));
+    recs.forEach(wrapShowname);
+
+    var order=[], byKey={};
+    recs.forEach(function(rec){
+      var k=groupKey(rec);
+      if(!byKey[k]){ byKey[k]={label:groupLabel(rec),recs:[]}; order.push(k); }
+      byKey[k].recs.push(rec);
+    });
+    if(alphabetical) order.sort();
+
+    list.innerHTML='';
+    order.forEach(function(k){
+      var g=byKey[k];
+      if(g.recs.length>1){
+        var wrap=document.createElement('div');
+        wrap.className='group';
+        var head=document.createElement('div');
+        head.className='group-head';
+        head.innerHTML='<span class="gname"></span><span class="gcount"></span>';
+        head.querySelector('.gname').textContent=g.label;
+        head.querySelector('.gcount').textContent=g.recs.length+' recordings';
+        wrap.appendChild(head);
+        g.recs.forEach(function(rec){
+          rec.classList.add('in-group');
+          wrap.appendChild(rec);
+        });
+        list.appendChild(wrap);
+      } else {
+        var rec=g.recs[0];
+        rec.classList.remove('in-group');
+        list.appendChild(rec);
+      }
+    });
+    applySearch();
+  }
+
+  /* ---------- search ---------- */
+  function recText(rec){
+    var parts=[showName(rec)];
+    var w=rec.querySelector('.where');
+    if(w) parts.push(w.textContent);
+    var m=rec.querySelector('.master');
+    if(m) parts.push(m.textContent);
+    /* cast dd = the dd right after a dt saying Cast */
+    Array.prototype.forEach.call(rec.querySelectorAll('.det dt'),function(dt){
+      if(/cast/i.test(dt.textContent)){
+        var dd=dt.nextElementSibling;
+        if(dd) parts.push(dd.textContent);
+      }
+    });
+    return parts.join(' ').toLowerCase();
+  }
+
+  function applySearch(){
+    var q=searchBox.value.trim().toLowerCase();
+    var list=activeList();
+    var any=false;
+    Array.prototype.forEach.call(list.querySelectorAll('.rec'),function(rec){
+      var hit=!q||recText(rec).indexOf(q)!==-1;
+      rec.style.display=hit?'':'none';
+      if(hit) any=true;
+    });
+    Array.prototype.forEach.call(list.querySelectorAll('.group'),function(g){
+      var visible=Array.prototype.some.call(g.querySelectorAll('.rec'),function(r){
+        return r.style.display!=='none';
+      });
+      g.style.display=visible?'':'none';
+    });
+    noResults.style.display=any?'none':'block';
+    updateCount();
+  }
+  searchBox.addEventListener('input',applySearch);
+
+  function updateCount(){
+    var n=0;
+    Array.prototype.forEach.call(activeList().querySelectorAll('.rec'),function(r){
+      if(r.style.display!=='none') n++;
+    });
+    document.getElementById('reccount').textContent=n;
+  }
+
+  /* ---------- tabs ---------- */
+  function switchTab(toAudio){
+    paneVideo.classList.toggle('active',!toAudio);
+    paneAudio.classList.toggle('active',toAudio);
+    tabVideo.classList.toggle('active',!toAudio);
+    tabAudio.classList.toggle('active',toAudio);
+    tabVideo.setAttribute('aria-selected',!toAudio);
+    tabAudio.setAttribute('aria-selected',toAudio);
+    applySearch();
+  }
+  tabVideo.addEventListener('click',function(){switchTab(false);});
+  tabAudio.addEventListener('click',function(){switchTab(true);});
+
+  /* ---------- sort ---------- */
+  document.getElementById('sortbtn').addEventListener('click', function(){
+    regroup(activeList(), true);
+  });
+
+  /* ---------- init ---------- */
+  regroup(document.getElementById('list'), false);
+  regroup(document.getElementById('list-audio'), false);
+  applySearch();
+})();
+</script>
+</body>
+</html>
